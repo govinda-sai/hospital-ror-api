@@ -4,6 +4,17 @@ ruby "3.0.2"
 
 gem "mongoid"
 
+gem "letter_opener", group: :development
+
+gem "whenever", require: false
+
+# gem "delayed_job_mongoid"
+
+# gem 'rubocop', require: false
+
+# gem "sidekiq"
+# gem "redis" 
+
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.1.2"
 

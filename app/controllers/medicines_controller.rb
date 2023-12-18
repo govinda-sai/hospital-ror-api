@@ -2,7 +2,10 @@ class MedicinesController < ApplicationController
     before_action :set_medicine, only: [:show, :update, :destroy]
   
     def index
-        @medicines = Medicine.all 
+        # @medicines = Medicine.all
+        @medicines = Medicine.all.map { |medicine| { 
+            medicine_id: medicine.id, medicine_name: medicine.name, price: medicine.price, expiry_date: medicine.expiry_date
+        }}
         render json: { medicines: @medicines }, status: :ok
     end
   
@@ -10,15 +13,16 @@ class MedicinesController < ApplicationController
         @medicine = Medicine.new(medicine_params)
         if @medicine.valid? 
             if @medicine.save 
-                render json: { medicine: @medicine }
+                render json: { message: "medicine created" }, status: :ok
+                # render json: { medicine: @medicine }
             end
         else 
-            render json: @medicine.errors.full_messages 
+            render json: @medicine.errors.full_messages, status: :unprocessable_entity
         end
     end
   
     def show 
-        render json: @medicine 
+        render json: { medicine_id: medicine.id, medicine_name: medicine.name, price: medicine.price, expiry_date: medicine.expiry_date }
     end 
   
     def update 

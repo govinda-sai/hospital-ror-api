@@ -15,6 +15,7 @@ Rails.application.routes.draw do
     member do 
       get "/patients-by-a-doctor", to: "doctors#patients_by_doctor"
       get "/patients-medicine-by-doctor", to: "doctors#patients_medicine_by_doctor"
+      get "/doctor-availabilities", to: "doctors#doctor_availabilities"
     end
   end
 
@@ -28,8 +29,10 @@ Rails.application.routes.draw do
   resources :appointments do 
     member do 
       get "/doctor-for-appointment", to: "appointments#doctor_for_appointment" 
+      get "/appointment-completion-method", to: "appointments#appointment_completion_method"
     end 
   end
+  get "/completed-appointments", to: "appointments#completed_appointments"
 
   resources :patient_medicines do 
     member do 
