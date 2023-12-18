@@ -2,24 +2,24 @@ class PatientsController < ApplicationController
     before_action :set_patient, only: [:show, :update, :destroy, :patients_medicines]
 
     def index
-        @patients = Patient.all
-        # @patients = Patient.all.map { |patient| 
-        # { patient_id: patient.id, patient_name: patient.name, patient_phone: patient.phone } }
+        # @patients = Patient.all
+        @patients = Patient.all.map { |patient| 
+        { patient_id: patient.id, patient_name: patient.name, gender: patient.gender, patient_phone: patient.phone } }
         render json: { patients: @patients }
     end
 
     def show
-        render json: { patient: @patient }
+        render json: { patient_id: @patient.id, name: @patient.name, gender: @patient.gender, patient_phone: @patient.phone }
     end
 
     def create
         @patient = Patient.new(patient_params)
         if @patient.valid?
             if @patient.save
-                render json: { patient: @patient }, status: :created
+                render json: { message: "patient created" }, status: :created
             end
         else 
-            render json: @patient.errors.full_messages 
+            render json: @patient.errors.full_messages, status: :unprocessable_entity
         end
     end
 
@@ -62,6 +62,6 @@ class PatientsController < ApplicationController
     end
 
     def patient_params
-        params.require(:patient).permit(:name, :gender, :phone)
+        params.require(:patient).permit(:name, :gender, :phone, :email)
     end
 end

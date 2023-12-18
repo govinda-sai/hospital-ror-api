@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        table,
+        th,
+        td {
+            border: 1px solid #000;
+            padding: 10px;
+            border-collapse: collapse;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>List of completed appointments with Medicine Details</h2><br>
+    <table>
+        <tr>
+            <th>Doctor Name</th>
+            <th>Patient Name</th>
+            <th>Appointment Date</th>
+            <th>Medicine Name</th>
+            <th>Quantity of Medicine</th>
+        </tr>
+        <% for appointment in @completed_appointments %>
+            <tr>
+                <td><%= appointment[:doctor_name] %></td>
+                <td><%= appointment[:patient_name] %></td>
+                <td><%= appointment[:appointment_date] %></td>
+                <td>
+                    <% for medicine in appointment[:patient_medicines] %>
+                        <%= medicine[:medicine_name] %><br>
+                    <% end %>
+                </td>
+                <td>
+                    <% for medicine in appointment[:patient_medicines] %>
+                        <%= medicine[:quantity_of_medicine] %><br>
+                    <% end %>
+                </td>
+            </tr>
+        <% end %>
+    </table>
+</body>
+
+</html>

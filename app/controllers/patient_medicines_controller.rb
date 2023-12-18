@@ -2,7 +2,13 @@ class PatientMedicinesController < ApplicationController
     before_action :set_patient_medicine, only: [:show, :update, :destroy]
   
     def index
-        @patient_medicines = PatientMedicine.all 
+        # @patient_medicines = PatientMedicine.all
+        @patient_medicines = PatientMedicine.all.map do |patient_medicine| {
+            patient_medicine_id: patient_medicine.id, patient_name: patient_medicine.patient.name, 
+            medicine_name: patient_medicine.medicine.name, quantity: patient_medicine.quantity,
+            total_amount: patient_medicine.total_amount
+        }
+        end
         render json: { patient_medicines: @patient_medicines }, status: :ok
     end
   
@@ -10,7 +16,8 @@ class PatientMedicinesController < ApplicationController
         @patient_medicine = PatientMedicine.new(patient_medicine_params)
         if @patient_medicine.valid? 
             if @patient_medicine.save 
-                render json: { medicine: @patient_medicine }
+                render json: { message: "patient medicine details added" }
+                # render json: { medicine: @patient_medicine }
             end
         else 
             render json: @patient_medicine.errors.full_messages 
@@ -18,7 +25,10 @@ class PatientMedicinesController < ApplicationController
     end
   
     def show 
-        render json: @patient_medicine 
+        render json: { 
+            patient_medicine_id: @patient_medicine.id, patient_name: @patient_medicine.patient.name, 
+            medicine_name: @patient_medicine.medicine.name, quantity: @patient_medicine.quantity,
+            total_amount: @patient_medicine.total_amount } 
     end 
   
     def update 

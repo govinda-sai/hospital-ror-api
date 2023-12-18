@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    </head>
+    <body>
+        <h1> APPOINTMENT DETAILS </h1>
+        <h2> Hello, <%= @appointment.patient.name %> </h2>
+        <h2> YOUR APPOINTMENT HAS BEEN CONFIRMED </h2>
+        <ul>
+            <li>Date: <%= @appointment.appointment_date %></li>
+            <li>Patient: <%= @appointment.patient.name %></li>
+            <li>Doctor: <%= @appointment.doctor.name %></li>
+        </ul>
+    </body>
+</html>

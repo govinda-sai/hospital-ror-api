@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        table, th, td {
+            border: 3px solid black;
+            padding: 7px;
+            border-collapse:collapse;
+        }
+    </style>
+</head>
+<body>
+    <h3>Your appointment has been completed</h3></br>
+    <h2>Medicine Details</h2>
+    <table>
+        <tr>
+            <th>Doctor Name</th>
+            <th>Patient Name</th>
+            <th>Appointment Date</th>
+            <th>Medicine Name</th>
+            <th>Quantity of Medicine</th>
+        </tr>
+        <% for patient_medicine in @patient_medicines %>
+            <tr>
+                <td><%= @doctor_name%></td>
+                <td><%= patient_medicine[:patient_name] %></td>
+                <td><%= @appointment_date %></td>
+                <td><%= patient_medicine[:medicine_name] %></td>
+                <td><%= patient_medicine[:quantity_of_medicine] %></td>
+            </tr>
+        <% end %>
+    </table>
+</body>
+</html>

@@ -13,6 +13,7 @@ require "action_mailer/railtie"
 require "action_view/railtie"
 require "action_cable/engine"
 require "rails/test_unit/railtie"
+# require "delayed_job"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -40,5 +41,14 @@ module Hospital
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
+
+    config.autoload_paths += %W(#{config.root}/app/controllers/concerns)
+
+    # config.active_job.queue_adapter = :sidekiq
+    config.action_mailer.delivery_method = :smtp # or :sendmail, :file, etc.
+    config.action_mailer.perform_deliveries = true
+    config.action_mailer.raise_delivery_errors = true
+
+
   end
 end

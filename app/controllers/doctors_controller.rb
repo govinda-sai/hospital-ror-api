@@ -1,7 +1,12 @@
-class DoctorsController < ApplicationController
-    before_action :set_doctor, 
-        only: [:show, :update, :destroy, :patients_by_doctor, :patients_medicine_by_doctor]
+# require "/home/govindasai/Hospital/app/models/doctor_availability.rb"
 
+class DoctorsController < ApplicationController
+    include DoctorAvailabilities
+    # extend DoctorAvailabilities
+
+    before_action :set_doctor, 
+        only: [:show, :update, :destroy, :patients_by_doctor, :patients_medicine_by_doctor, :doctor_availabilities]
+    
     def index 
         # @doctors = Doctor.all
         # @doctors = Doctor.pluck(:name, :email, :specialization)
@@ -11,8 +16,7 @@ class DoctorsController < ApplicationController
     end
 
     def show 
-        # render json: { doctor: @doctor }
-        render json: { doctor_id: @doctor.id, name: @doctor.name }
+        render json: { doctor_id: @doctor.id, name: @doctor.name, email: @doctor.email, specialization: @doctor.specialization }
     end
 
     def create 
@@ -54,13 +58,24 @@ class DoctorsController < ApplicationController
         render json: { patients: @patients, patient_medicines_by_doctor: @medicines }
     end
 
+    # doctor availabilities 
+    def doctor_availabilities 
+        if @doctor.present?
+            errors = []
+            availabilities, errors = get_appointment_time(@doctor, errors)
+            render json: { doctor_availabilities: availabilities }
+        else 
+            render json: @doctor.errors.full_messages
+        end
+    end
+
     private 
 
     def set_doctor 
         begin
             @doctor = Doctor.find(params[:id]) 
         rescue Mongoid::Errors::DocumentNotFound
-            render json: { message: "doctor not found" }
+            render json: { message: "doctor not found" }, status: :not_found
         end
     end 
 
