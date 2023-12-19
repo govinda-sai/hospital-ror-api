@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AppointmentsController < ApplicationController # rubocop:disable Style/Documentation
+class AppointmentsController < ApplicationController # rubocop:disable Style/Documentation,Metrics/ClassLength
   include AppointmentMappings
   before_action :set_appointment,
                 only: %i[show update destroy doctor_for_appointment appointment_completion_method]
@@ -9,10 +9,6 @@ class AppointmentsController < ApplicationController # rubocop:disable Style/Doc
     @appointments = Appointment.all
     @mapped_appointments = appointment_mapping(@appointments)
     render json: { appointments: @mapped_appointments }, status: :ok
-    # @appointments = Appointment.all.map { |appointment| {
-    #     appointment_id: appointment.id, doctor_name: appointment.doctor.name.upcase(),
-    #     patient_name: appointment.patient.name.upcase(), appointment_time: appointment.appointment_date
-    # }}
   end
 
   def create # rubocop:disable Metrics/MethodLength
@@ -23,7 +19,6 @@ class AppointmentsController < ApplicationController # rubocop:disable Style/Doc
         puts "---------------------Time now-------------------- #{Time.now}"
         AppointmentMailer.patient_mail(@appointment).deliver_now
         puts 'mail sent'
-        # render json: { appointment: @appointment }, status: :created
         render json: { message: 'appointment added' }, status: :created
       else
         render json: { message: 'appointment not created' }, status: :unprocessable_entity
@@ -42,7 +37,6 @@ class AppointmentsController < ApplicationController # rubocop:disable Style/Doc
     previous_date = @appointment.appointment_date
     if @appointment.update(appointment_params)
       AppointmentMailer.update_appointment(@appointment).deliver_now
-      #  AppointmentMailWorker.perform_async('update_appointment', @appointment.id)
       render json: { previous_appointment_date: previous_date, updated_appointment: @appointment }
     else
       render json: @appointment.errors.full_messages, status: :unprocessable_entity
@@ -63,41 +57,57 @@ class AppointmentsController < ApplicationController # rubocop:disable Style/Doc
   end
 
   # appointment completion
-  def appointment_completion_method
+  def appointment_completion_method # rubocop:disable Metrics/MethodLength,Metrics/AbcSize,Metrics/PerceivedComplexity
     return unless @appointment
 
     if Time.now > @appointment.appointment_date
       puts Time.now
-      AppointmentCompletionMailer.appointment_completion(@appointment).deliver_now
-      render json: { message: 'appointment has been completed and email sent' }
+      if @appointment.status == 'o' || @appointment.status.nil?
+        if AppointmentCompletionMailer.appointment_completion(@appointment).deliver_now
+          @appointment.update(status: 'c')
+          render json: { message: 'appointment has been completed and email sent' }
+        else
+          @appointment.update(status: 'o')
+          render json: { message: 'could not send mail' }
+        end
+      else
+        render json: { message: 'appointment mail has been sent and is closed' }
+      end
     else
       render json: { message: 'appointment has yet to be completed' }
     end
   end
 
-  # all completed appointments
   def completed_appointments # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
     @appointments = Appointment.all
-    @completed_appointments = []
-    @appointments.each do |appointment|
-      @completed_appointments << appointment if Time.now > appointment.appointment_date
+    @completed_appointments = @appointments.select do |appointment|
+      Time.now > appointment.appointment_date && appointment.status == 'o'
     end
-    if !@completed_appointments.empty?
-      AppointmentCompletionMailer.completed_appointments(@appointments).deliver_now
-      render json: { completed_appointments: @completed_appointments.map do |appointment|
-        {
-          doctor_name: appointment.doctor.name, patient_name: appointment.patient.name,
-          appointment_date: appointment.appointment_date,
-          medicine_details: appointment.patient.patient_medicines.map do |patient_medicine|
-                              {
-                                medicine_name: patient_medicine.medicine.name,
-                                quantity_of_medicine: patient_medicine.quantity
-                              }
-                            end
-        }
-      end }
+
+    if @completed_appointments.present?
+      AppointmentCompletionMailer.completed_appointments(@completed_appointments).deliver_now
+      @completed_appointments.each do |appointment|
+        appointment.update(status: 'c')
+      end
+
+      render json: {
+        completed_appointments: @completed_appointments.map do |appointment|
+          {
+            doctor_name: appointment.doctor.name,
+            patient_name: appointment.patient.name,
+            appointment_date: appointment.appointment_date,
+            medicine_details: appointment.patient.patient_medicines.map do |patient_medicine|
+              {
+                medicine_name: patient_medicine.medicine.name,
+                quantity_of_medicine: patient_medicine.quantity
+              }
+            end,
+            appointment_status: appointment.status
+          }
+        end
+      }
     else
-      render json: { message: 'no appointments' }
+      render json: { message: 'no completed appointments' }
     end
   end
 
