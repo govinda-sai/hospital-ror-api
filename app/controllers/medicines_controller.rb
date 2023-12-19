@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class MedicinesController < ApplicationController # rubocop:disable Style/Documentation
-  before_action :set_medicine, only: [:show, :update, :destroy]
+  before_action :set_medicine, only: %i[show update destroy]
 
   def index
     # @medicines = Medicine.all
@@ -26,7 +26,8 @@ class MedicinesController < ApplicationController # rubocop:disable Style/Docume
   end
 
   def show
-    render json: { medicine_id: medicine.id, medicine_name: medicine.name, price: medicine.price, expiry_date: medicine.expiry_date }
+    render json: { medicine_id: medicine.id, medicine_name: medicine.name, price: medicine.price,
+                   expiry_date: medicine.expiry_date }
   end
 
   def update
@@ -37,8 +38,8 @@ class MedicinesController < ApplicationController # rubocop:disable Style/Docume
     end
   end
 
-  def destroy 
-    if @medicine.destroy 
+  def destroy
+    if @medicine.destroy
       render json: { message: 'medicine deleted' }, status: :ok
     else
       render json: { message: 'medicine not deleted' }, status: :unprocessable_entity

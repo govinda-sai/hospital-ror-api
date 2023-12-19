@@ -11,7 +11,7 @@ class Medicine # rubocop:disable Style/Documentation
 
   # validates_presenece_of :name, :expiry_date, :price
 
-  def patients 
+  def patients
     Patient.in(id: patient_medicine.pluck(:patient_id))
   end
 end

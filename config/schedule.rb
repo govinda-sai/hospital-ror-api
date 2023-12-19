@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Use this file to easily define all of your cron jobs.
 #
 # It's helpful, but not entirely necessary to understand cron before proceeding.
@@ -21,11 +23,11 @@
 
 # config/schedule.rb
 
-# set :output, "log/cron.log" 
+# set :output, "log/cron.log"
 
 # set :environment, "development"
-set :output, "log/cron.log"
+set :output, 'log/cron.log'
 
 every 1.minutes do
-    rake "example:say_hello"
+  rake 'example:say_hello'
 end

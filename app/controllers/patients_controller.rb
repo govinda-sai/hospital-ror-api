@@ -5,13 +5,15 @@ class PatientsController < ApplicationController # rubocop:disable Style/Documen
 
   def index
     # @patients = Patient.all
-    @patients = Patient.all.map { |patient| 
-    { patient_id: patient.id, patient_name: patient.name, gender: patient.gender, patient_phone: patient.phone } }
+    @patients = Patient.all.map do |patient|
+      { patient_id: patient.id, patient_name: patient.name, gender: patient.gender, patient_phone: patient.phone }
+    end
     render json: { patients: @patients }
   end
 
   def show
-    render json: { patient_id: @patient.id, name: @patient.name, gender: @patient.gender, patient_phone: @patient.phone }
+    render json: { patient_id: @patient.id, name: @patient.name, gender: @patient.gender,
+                   patient_phone: @patient.phone }
   end
 
   def create
@@ -47,7 +49,7 @@ class PatientsController < ApplicationController # rubocop:disable Style/Documen
 
   # patient's medicines
   def patients_medicines
-    @medicines = @patient.medicines 
+    @medicines = @patient.medicines
     render json: { patients_medicines: @medicines }
   end
 
@@ -55,8 +57,8 @@ class PatientsController < ApplicationController # rubocop:disable Style/Documen
 
   def set_patient
     @patient = Patient.find(params[:id])
-  rescue Mongoid::Errors::DocumentNotFound => e
-    render json: { message: 'patient not found' }, status: :not_found 
+  rescue Mongoid::Errors::DocumentNotFound
+    render json: { message: 'patient not found' }, status: :not_found
   end
 
   def patient_params

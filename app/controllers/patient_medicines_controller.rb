@@ -7,10 +7,10 @@ class PatientMedicinesController < ApplicationController # rubocop:disable Style
     # @patient_medicines = PatientMedicine.all
     @patient_medicines = PatientMedicine.all.map do |patient_medicine|
       {
-        patient_medicine_id: patient_medicine.id, patient_name: patient_medicine.patient.name, 
+        patient_medicine_id: patient_medicine.id, patient_name: patient_medicine.patient.name,
         medicine_name: patient_medicine.medicine.name, quantity: patient_medicine.quantity,
         total_amount: patient_medicine.total_amount
-    }
+      }
     end
     render json: { patient_medicines: @patient_medicines }, status: :ok
   end
@@ -29,9 +29,10 @@ class PatientMedicinesController < ApplicationController # rubocop:disable Style
 
   def show
     render json: {
-      patient_medicine_id: @patient_medicine.id, patient_name: @patient_medicine.patient.name, 
+      patient_medicine_id: @patient_medicine.id, patient_name: @patient_medicine.patient.name,
       medicine_name: @patient_medicine.medicine.name, quantity: @patient_medicine.quantity,
-      total_amount: @patient_medicine.total_amount }
+      total_amount: @patient_medicine.total_amount
+    }
   end
 
   def update
@@ -60,11 +61,11 @@ class PatientMedicinesController < ApplicationController # rubocop:disable Style
 
   def set_patient_medicine
     @patient_medicine = PatientMedicine.find(params[:id])
-  rescue Mongoid::Errors::DocumentNotFound 
+  rescue Mongoid::Errors::DocumentNotFound
     render json: { message: 'patient medicine id not found' }, status: :not_found
   end
 
-  def patient_medicine_params 
+  def patient_medicine_params
     params.require(:patient_medicine).permit(:patient_id, :medicine_id, :quantity)
   end
 end

@@ -10,20 +10,20 @@ class AppointmentsController < ApplicationController # rubocop:disable Style/Doc
     @mapped_appointments = appointment_mapping(@appointments)
     render json: { appointments: @mapped_appointments }, status: :ok
     # @appointments = Appointment.all.map { |appointment| {
-    #     appointment_id: appointment.id, doctor_name: appointment.doctor.name.upcase(), 
+    #     appointment_id: appointment.id, doctor_name: appointment.doctor.name.upcase(),
     #     patient_name: appointment.patient.name.upcase(), appointment_time: appointment.appointment_date
     # }}
   end
 
   def create # rubocop:disable Metrics/MethodLength
     @appointment = Appointment.new(appointment_params)
-    if @appointment.valid? 
+    if @appointment.valid?
       if @appointment.save
         puts 'sending email now...'
-        puts "---------------------Time now-------------------- #{Time.now}" 
+        puts "---------------------Time now-------------------- #{Time.now}"
         AppointmentMailer.patient_mail(@appointment).deliver_now
         puts 'mail sent'
-        # render json: { appointment: @appointment }, status: :created 
+        # render json: { appointment: @appointment }, status: :created
         render json: { message: 'appointment added' }, status: :created
       else
         render json: { message: 'appointment not created' }, status: :unprocessable_entity
@@ -34,7 +34,7 @@ class AppointmentsController < ApplicationController # rubocop:disable Style/Doc
   end
 
   def show
-    render json: { appointment_id: @appointment.id, doctor_name: @appointment.doctor.name, 
+    render json: { appointment_id: @appointment.id, doctor_name: @appointment.doctor.name,
                    patient_name: @appointment.patient.name, appointment_date: @appointment.appointment_date }
   end
 
@@ -57,7 +57,7 @@ class AppointmentsController < ApplicationController # rubocop:disable Style/Doc
     end
   end
 
-  def doctor_for_appointment 
+  def doctor_for_appointment
     @doctor = @appointment.doctor
     render json: { doctor_for_appointment: @doctor }, status: :ok
   end
@@ -67,7 +67,7 @@ class AppointmentsController < ApplicationController # rubocop:disable Style/Doc
     return unless @appointment
 
     if Time.now > @appointment.appointment_date
-      puts Time.now.to_s
+      puts Time.now
       AppointmentCompletionMailer.appointment_completion(@appointment).deliver_now
       render json: { message: 'appointment has been completed and email sent' }
     else
@@ -75,11 +75,11 @@ class AppointmentsController < ApplicationController # rubocop:disable Style/Doc
     end
   end
 
-  # all completed appointments 
+  # all completed appointments
   def completed_appointments # rubocop:disable Metrics/MethodLength
     @appointments = Appointment.all
     @completed_appointments = []
-    @appointments.each do |appointment| 
+    @appointments.each do |appointment|
       @completed_appointments << appointment if Time.now > appointment.appointment_date
     end
     if !@completed_appointments.empty?

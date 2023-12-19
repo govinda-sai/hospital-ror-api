@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # require "/home/govindasai/Hospital/app/models/doctor_availability.rb"
 
 class DoctorsController < ApplicationController # rubocop:disable Style/Documentation
@@ -10,14 +12,15 @@ class DoctorsController < ApplicationController # rubocop:disable Style/Document
   def index
     # @doctors = Doctor.all
     # @doctors = Doctor.pluck(:name, :email, :specialization)
-    @doctors = Doctor.all.map { |doctor| 
+    @doctors = Doctor.all.map do |doctor|
       { doctor_id: doctor.id, name: doctor.name, email: doctor.email, specialization: doctor.specialization }
-    }
+    end
     render json: { doctors: @doctors }, status: :ok
   end
 
   def show
-    render json: { doctor_id: @doctor.id, name: @doctor.name, email: @doctor.email, specialization: @doctor.specialization }
+    render json: { doctor_id: @doctor.id, name: @doctor.name, email: @doctor.email,
+                   specialization: @doctor.specialization }
   end
 
   def create
@@ -37,7 +40,7 @@ class DoctorsController < ApplicationController # rubocop:disable Style/Document
     end
   end
 
-  def destroy 
+  def destroy
     if @doctor.destroy
       render json: { message: 'doctor deleted' }
     else
@@ -51,17 +54,17 @@ class DoctorsController < ApplicationController # rubocop:disable Style/Document
     render json: { patients_by_a_doctor: @patients }, status: :ok
   end
 
-  def patients_medicine_by_doctor 
-    @patients = @doctor.patients 
+  def patients_medicine_by_doctor
+    @patients = @doctor.patients
     @medicines = @patients.flat_map(&:medicines)
     render json: { patients: @patients, patient_medicines_by_doctor: @medicines }
   end
 
   # doctor availabilities
-  def doctor_availabilities 
+  def doctor_availabilities
     if @doctor.present?
       errors = []
-      availabilities, errors = get_appointment_time(@doctor, errors)
+      availabilities, = get_appointment_time(@doctor, errors)
       render json: { doctor_availabilities: availabilities }
     else
       render json: @doctor.errors.full_messages
@@ -71,7 +74,7 @@ class DoctorsController < ApplicationController # rubocop:disable Style/Document
   private
 
   def set_doctor
-    @doctor = Doctor.find(params[:id]) 
+    @doctor = Doctor.find(params[:id])
   rescue Mongoid::Errors::DocumentNotFound
     render json: { message: 'doctor not found' }, status: :not_found
   end
