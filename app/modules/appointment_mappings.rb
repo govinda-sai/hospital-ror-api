@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module AppointmentMappings  # rubocop:disable Style/Documentation
+module AppointmentMappings # rubocop:disable Style/Documentation
   def appointment_mapping(appointments)
     appointments.map do |appointment|
       {

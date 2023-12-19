@@ -7,8 +7,8 @@ class AppointmentMailer < ApplicationMailer # rubocop:disable Style/Documentatio
     mail(to: 'c77023161@gmail.com', subject: 'Appointment Confirmation')
   end
 
-  def update_appointment(appointment) 
-    @appointment = appointment 
+  def update_appointment(appointment)
+    @appointment = appointment
     attachments['cheers.webp'] = File.read('/home/govindasai/Downloads/memer.webp')
     mail(to: 'lohit9390@gmail.com', subject: 'Appointment date updated')
   end

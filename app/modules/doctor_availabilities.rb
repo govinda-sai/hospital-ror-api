@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module DoctorAvailabilities # rubocop:disable Style/Documentation
-  def get_appointment_time(doctor, errors = [])  # rubocop:disable Metrics/MethodLength
+  def get_appointment_time(doctor, errors = []) # rubocop:disable Metrics/MethodLength
     if doctor
       start_time = DateTime.parse(params[:start_time]).beginning_of_day
       end_time = DateTime.parse(params[:end_time]).end_of_day
