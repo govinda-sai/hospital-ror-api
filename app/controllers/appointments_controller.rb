@@ -76,7 +76,7 @@ class AppointmentsController < ApplicationController # rubocop:disable Style/Doc
   end
 
   # all completed appointments
-  def completed_appointments # rubocop:disable Metrics/MethodLength
+  def completed_appointments # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
     @appointments = Appointment.all
     @completed_appointments = []
     @appointments.each do |appointment|
@@ -84,7 +84,18 @@ class AppointmentsController < ApplicationController # rubocop:disable Style/Doc
     end
     if !@completed_appointments.empty?
       AppointmentCompletionMailer.completed_appointments(@appointments).deliver_now
-      render json: { completed_appointments: @completed_appointments }
+      render json: { completed_appointments: @completed_appointments.map do |appointment|
+        {
+          doctor_name: appointment.doctor.name, patient_name: appointment.patient.name,
+          appointment_date: appointment.appointment_date,
+          medicine_details: appointment.patient.patient_medicines.map do |patient_medicine|
+                              {
+                                medicine_name: patient_medicine.medicine.name,
+                                quantity_of_medicine: patient_medicine.quantity
+                              }
+                            end
+        }
+      end }
     else
       render json: { message: 'no appointments' }
     end
