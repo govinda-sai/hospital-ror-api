@@ -1,4 +1,6 @@
-class Medicine
+# frozen_string_literal: true
+
+class Medicine # rubocop:disable Style/Documentation
   include Mongoid::Document
   include Mongoid::Timestamps
   field :name, type: String

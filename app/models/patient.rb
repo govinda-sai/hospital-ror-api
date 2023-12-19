@@ -1,4 +1,6 @@
-class Patient
+# frozen_string_literal: true
+
+class Patient # rubocop:disable Style/Documentation
   include Mongoid::Document
   include Mongoid::Timestamps
   field :name, type: String
@@ -12,12 +14,12 @@ class Patient
   has_many :appointments
   has_many :patient_medicines
   # has_many :medicines, through: :patient_medicines
-  
-  def doctors 
+
+  def doctors
     Doctor.in(id: appointments.pluck(:doctor_id))
   end
 
-  def medicines 
+  def medicines
     Medicine.in(id: patient_medicines.pluck(:medicine_id))
   end
 end

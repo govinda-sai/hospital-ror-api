@@ -1,4 +1,4 @@
-class PatientMedicine
+class PatientMedicine # rubocop:disable Style/FrozenStringLiteralComment,Style/Documentation
   include Mongoid::Document
   include Mongoid::Timestamps
   field :quantity, type: Integer
@@ -15,7 +15,7 @@ class PatientMedicine
     if quantity.present? && medicine.present? 
       self.total_amount = quantity * medicine.price 
     else
-      errors.add("quantity and medicine should be entered")
+      errors.add('quantity and medicine should be entered')
     end
   end
 end
