@@ -7,7 +7,7 @@ class Doctor
 
   has_many :appointments
 
-  validates_presence_of :name, :email, :specialization
+  # validates_presence_of :name, :email, :specialization
 
   def patients 
     Patient.in(id: appointments.pluck(:patient_id))

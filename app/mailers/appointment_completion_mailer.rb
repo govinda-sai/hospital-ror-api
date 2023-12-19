@@ -1,4 +1,5 @@
 class AppointmentCompletionMailer < ApplicationMailer
+
   def appointment_completion(appointment)
     @appointment = appointment
     @doctor_name = @appointment.doctor.name

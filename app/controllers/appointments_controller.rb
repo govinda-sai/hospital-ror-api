@@ -1,7 +1,7 @@
 class AppointmentsController < ApplicationController
     include AppointmentMappings
-    before_action :set_appointment, 
-    only: [:show, :update, :destroy, :doctor_for_appointment, :appointment_completion_method]
+        before_action :set_appointment, 
+        only: [:show, :update, :destroy, :doctor_for_appointment, :appointment_completion_method]
   
     def index
         @appointments = Appointment.all
@@ -17,11 +17,12 @@ class AppointmentsController < ApplicationController
         @appointment = Appointment.new(appointment_params)
         if @appointment.valid? 
             if @appointment.save
-                puts "sending email now..."
+                puts 'sending email now...'
+                puts "---------------------Time now-------------------- #{Time.now}" 
                 AppointmentMailer.patient_mail(@appointment).deliver_now
                 puts "mail sent"
                 # render json: { appointment: @appointment }, status: :created 
-                render json: { message: "appointment created" }, status: :created
+                render json: { message: "appointment added" }, status: :created
             else 
                 render json: { message: "appointment not created" }, status: :unprocessable_entity
             end
@@ -100,7 +101,6 @@ class AppointmentsController < ApplicationController
     end
   
     def appointment_params
-        params.require(:appointment).permit(:appointment_date, :doctor_id, :patient_id, 
-                                    :doctor_name, :patient_name)
+        params.require(:appointment).permit(:appointment_date, :status, :doctor_id, :patient_id)
     end
 end
