@@ -7,6 +7,8 @@ class Medicine
 
   has_many :patient_medicines
 
+  # validates_presenece_of :name, :expiry_date, :price
+
   def patients 
     Patient.in(id: patient_medicine.pluck(:patient_id))
   end

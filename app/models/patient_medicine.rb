@@ -7,6 +7,8 @@ class PatientMedicine
   belongs_to :patient
   belongs_to :medicine
 
+  # validates_presenece_of :quantity
+
   before_save :calculate_total_amount
 
   def calculate_total_amount 

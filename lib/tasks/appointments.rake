@@ -10,7 +10,7 @@ namespace :appointments do
 
   # desc "delete last 20 records" 
   # task delete_last_20: :environment do 
-  #   for i in 1..20 
+  #   for i in 1..7
   #     last_appointment = Appointment.last 
   #     last_appointment.destroy 
   #   end
