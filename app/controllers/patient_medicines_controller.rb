@@ -18,10 +18,7 @@ class PatientMedicinesController < ApplicationController # rubocop:disable Style
   def create
     @patient_medicine = PatientMedicine.new(patient_medicine_params)
     if @patient_medicine.valid?
-      if @patient_medicine.save
-        render json: { message: 'patient medicine details added' }
-        # render json: { medicine: @patient_medicine }
-      end
+      render json: { message: 'patient medicine details added' } if @patient_medicine.save
     else
       render json: @patient_medicine.errors.full_messages
     end

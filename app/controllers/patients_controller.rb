@@ -4,7 +4,6 @@ class PatientsController < ApplicationController # rubocop:disable Style/Documen
   before_action :set_patient, only: %i[show update destroy patients_medicines]
 
   def index
-    # @patients = Patient.all
     @patients = Patient.all.map do |patient|
       { patient_id: patient.id, patient_name: patient.name, gender: patient.gender, patient_phone: patient.phone }
     end

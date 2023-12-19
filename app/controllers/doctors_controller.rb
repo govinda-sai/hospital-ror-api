@@ -9,8 +9,6 @@ class DoctorsController < ApplicationController # rubocop:disable Style/Document
                 only: %i[show update destroy patients_by_doctor patients_medicine_by_doctor doctor_availabilities]
 
   def index
-    # @doctors = Doctor.all
-    # @doctors = Doctor.pluck(:name, :email, :specialization)
     @doctors = Doctor.all.map do |doctor|
       { doctor_id: doctor.id, name: doctor.name, email: doctor.email, specialization: doctor.specialization }
     end
@@ -64,7 +62,6 @@ class DoctorsController < ApplicationController # rubocop:disable Style/Document
     if @doctor.present?
       errors = []
       availabilities, = get_appointment_time(@doctor, errors)
-      # render json: { doctor_availabilities: availabilities }
       render json: { doctor_availabilities: availabilities.map do |available| 
                                               {
                                                 doctor_id: available.doctor.id, doctor_name: available.doctor.name,

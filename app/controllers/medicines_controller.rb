@@ -4,7 +4,6 @@ class MedicinesController < ApplicationController # rubocop:disable Style/Docume
   before_action :set_medicine, only: %i[show update destroy]
 
   def index
-    # @medicines = Medicine.all
     @medicines = Medicine.all.map do |medicine|
       {
         medicine_id: medicine.id, medicine_name: medicine.name, price: medicine.price, expiry_date: medicine.expiry_date
@@ -16,10 +15,7 @@ class MedicinesController < ApplicationController # rubocop:disable Style/Docume
   def create
     @medicine = Medicine.new(medicine_params)
     if @medicine.valid?
-      if @medicine.save
-        render json: { message: 'medicine created' }, status: :ok
-        # render json: { medicine: @medicine }
-      end
+      render json: { message: 'medicine created' }, status: :ok if @medicine.save
     else
       render json: @medicine.errors.full_messages, status: :unprocessable_entity
     end
