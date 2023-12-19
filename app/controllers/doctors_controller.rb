@@ -62,7 +62,7 @@ class DoctorsController < ApplicationController # rubocop:disable Style/Document
     if @doctor.present?
       errors = []
       availabilities, = get_appointment_time(@doctor, errors)
-      render json: { doctor_availabilities: availabilities.map do |available| 
+      render json: { doctor_availabilities: availabilities.map do |available|
                                               {
                                                 doctor_id: available.doctor.id, doctor_name: available.doctor.name,
                                                 patient_detials: available.doctor.patients.map do |patient|
