@@ -50,5 +50,14 @@ module Hospital
     config.action_mailer.delivery_method = :smtp # or :sendmail, :file, etc.
     config.action_mailer.perform_deliveries = true
     config.action_mailer.raise_delivery_errors = true
+
+    # config/application.rb
+
+    config.session_store :cookie_store, key: 'hospital_api'
+
+    # config/application.rb
+
+    config.middleware.use ActionDispatch::Cookies
+    config.middleware.use ActionDispatch::Session::CookieStore
   end
 end

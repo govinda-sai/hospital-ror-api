@@ -12,11 +12,18 @@ gem 'whenever', require: false
 
 gem 'rubocop'
 
+gem 'will_paginate'
+
+# gem 'devise'
+
+# gem 'kaminari'
+
 # gem "delayed_job_mongoid"
 
 # gem 'rubocop', require: false
 
 # gem "sidekiq"
+
 # gem "redis"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"

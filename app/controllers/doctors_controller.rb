@@ -5,10 +5,13 @@
 class DoctorsController < ApplicationController # rubocop:disable Style/Documentation
   include DoctorAvailabilities
   # extend DoctorAvailabilities
+
+  before_action :authenticate_user!, only: %i[index show]
   before_action :set_doctor,
                 only: %i[show update destroy patients_by_doctor patients_medicine_by_doctor doctor_availabilities]
 
   def index
+    # @doctors = Doctor.all.paginate(page: params[:page], per_page: 2)
     @doctors = Doctor.all.map do |doctor|
       { doctor_id: doctor.id, name: doctor.name, email: doctor.email, specialization: doctor.specialization }
     end
