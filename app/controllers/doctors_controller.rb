@@ -6,7 +6,7 @@ class DoctorsController < ApplicationController # rubocop:disable Style/Document
   include DoctorAvailabilities
   # extend DoctorAvailabilities
 
-  before_action :authenticate_user!, only: %i[index show]
+  # before_action :authenticate_user!, only: %i[index show]
   before_action :set_doctor,
                 only: %i[show update destroy patients_by_doctor patients_medicine_by_doctor doctor_availabilities]
 
